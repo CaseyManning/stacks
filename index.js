@@ -1,4 +1,4 @@
-stacks = JSON.parse(substackData)
+// stacks = JSON.parse(substackData)
 
 var urlDict = {};
 

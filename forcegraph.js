@@ -1,8 +1,14 @@
+var ticks = 0;
+
 function infobox(node) {
   document.getElementById("infobox").classList.remove("hidden");
   var stack = urlDict[node.id];
   console.log(urlDict[node.id])
   document.getElementById("boxtitle").innerHTML = stack.name;
+  document.getElementById("boxsubs").innerHTML = stack.n_subs + " subscribers";
+  if(stack.n_subs < 0) {
+  document.getElementById("boxsubs").innerHTML = "Under 1000 subscribers";
+  }
   // document.getElementById("boxdesc").innerHTML = stack.description;
   document.getElementById("boxlink").href = stack.url;
 }
@@ -96,12 +102,12 @@ function ForceGraph({
         .attr("r", 5)
         .call(drag(simulation));
 
-      node.append("text")
-      .text(function(d) {
-        return d.id;
-      })
-      .style('fill', '#000')
-      .style('font-size', '12px')
+      // node.append("text")
+      // .text(function(d) {
+      //   return d.id;
+      // })
+      // .style('fill', '#000')
+      // .style('font-size', '12px')
       // .attr('x', 6)
       // .attr('y', 3);
   
@@ -110,7 +116,7 @@ function ForceGraph({
     if (W) link.attr("stroke-width", ({index: i}) => W[i]);
     if (L) link.attr("stroke", ({index: i}) => L[i]);
     if (G) node.attr("fill", ({index: i}) => color(G[i]));
-    if (T) node.append("title").text(({index: i}) => T[i]);
+    // if (T) node.append("title").text(({index: i}) => T[i]);
     if (invalidation != null) invalidation.then(() => simulation.stop());
   
     function intern(value) {
@@ -118,6 +124,7 @@ function ForceGraph({
     }
   
     function ticked() {
+      ticks += 1;
       link
         .attr("x1", d => d.source.x)
         .attr("y1", d => d.source.y)
@@ -147,7 +154,12 @@ function ForceGraph({
       }
       
       function dragended(event) {
-        if (!event.active) simulation.alphaTarget(0.1);
+        if (!event.active) {
+          if(ticks < 500) {
+            simulation.alphaTarget(0.3)
+          } else {
+            simulation.alphaTarget(0)
+          }};
         event.subject.fx = null;
         event.subject.fy = null;
       }
