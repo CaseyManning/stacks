@@ -1,17 +1,30 @@
+<head>
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0"/>
+    <link rel="stylesheet" href="index.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fuzzysort@2.0.4/fuzzysort.min.js"></script>
+</head>
 <body>
     <div class="box hidden" id="infobox">
-        <h2 id="boxtitle">yo</h2>
-        <p id="boxsubs">Number of Subscribers</p>
-        <p id="boxdesc">a page of some sort</p>
-        <a href="#" id="boxlink" target="_blank">Visit Substack</a>
+        <h2 id="boxtitle" class="sf" style="color: black;">yo</h2>
+        <p id="boxsubs" style="display: inline;">Number of Subscribers</p> <a href="#" id="boxlink" target="_blank" style="display: inline;">(Visit)</a>
+        <!-- <p id="boxdesc">a page of some sort</p> -->
+        <!-- <p id="reclist">Reccomended by: <br> a <br> b <br> c </p> -->
+        <p id="inlinks" class="sf"></p>
+        <p id="outlinks" class="sf"></p>
     </div>
     <div class="box" id="settings">
-        <input type="checkbox" id="logcheck" name="vehicle1" value="Bike" checked onclick="reloadNodes()">
+        <input type="checkbox" id="logcheck"checked onclick="reloadNodes()">
         <label for="vehicle1"> Log Scale</label><br>
+
+        <input type="checkbox" id="animcheck" checked onclick="stopAnim()">
+        <label for="vehicle1"> Animate</label><br>
+    </div>
+    <div id="search" class="box hidden">
+        <input type="text" id="searchbar" placeholder="Search for a substack" onkeyup="search()">
+        <div id="searchresults"></div>
     </div>
 </body>
 <script src="substacks.js"></script>
-<link rel="stylesheet" href="index.css">
-<script src="https://d3js.org/d3.v7.min.js"></script>
 <script src="forcegraph.js"></script>
 <script src="index.js"></script>

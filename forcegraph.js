@@ -1,16 +1,51 @@
 var ticks = 0;
+var lastNode;
+var stopped = false;
+var sim;
 
-function infobox(node) {
-  document.getElementById("infobox").classList.remove("hidden");
+
+function stripSlashes(url) {
+  return url.replaceAll("/", "").replaceAll(":", "").replaceAll(".", "").replaceAll(" ", "");
+}
+
+function infobox(event) {
+  let node = event.subject;
   var stack = urlDict[node.id];
-  console.log(urlDict[node.id])
+  infobox_stack(node.id, stack);
+}
+
+function infobox_stack(nodeID, stack) {
+  console.log("infoboxing with id: " + nodeID + " and stack: ")
+  console.log(stack)
+  document.getElementById("infobox").classList.remove("hidden");
   document.getElementById("boxtitle").innerHTML = stack.name;
   document.getElementById("boxsubs").innerHTML = stack.n_subs + " subscribers";
   if(stack.n_subs < 0) {
-  document.getElementById("boxsubs").innerHTML = "Under 1000 subscribers";
+    document.getElementById("boxsubs").innerHTML = "Under 1000 subscribers";
   }
-  // document.getElementById("boxdesc").innerHTML = stack.description;
   document.getElementById("boxlink").href = stack.url;
+  document.getElementById("inlinks").innerHTML = "Recommeded by " + stack.inlinks + "  pages.";
+  document.getElementById("outlinks").innerHTML = "Recommends " + stack.outlinks.length + " others.";
+
+  d3.selectAll('svg g').selectChildren("circle").attr("stroke", ({id: d}) => d == nodeID ? "black" : "white")
+  // d3.selectAll('svg g').selectChildren("circle").attr("fill", ({id: d}) => d == nodeID ? "black" : "blue")
+  d3.selectAll('svg g').selectChildren("circle").attr("stroke-width", ({id: d}) => d == nodeID ? 3 : 1.5)
+  d3.selectAll('svg g').selectChildren("line").attr("stroke", d => (d.source.id == nodeID || d.target.id == nodeID) ? "black" : "gray")
+}
+
+function stopAnim() {
+  sim.stop();
+  sim.tick()
+  sim.tick()
+  sim.tick()
+    // while (sim.alpha() > sim.alphaMin()) {
+    //   sim.tick();
+    // }
+    // ticked();
+    // The simulation has been completed. Draw the final product and update the timer.
+    stopped = true;
+    sim.alphaTarget(0).restart()
+    sim.stop();
 }
 
 // Copyright 2021 Observable, Inc.
@@ -101,7 +136,7 @@ function ForceGraph({
       .join("circle")
         .attr("r", 5)
         .call(drag(simulation));
-
+    sim = simulation;
       // node.append("text")
       // .text(function(d) {
       //   return d.id;
@@ -112,6 +147,8 @@ function ForceGraph({
       // .attr('y', 3);
   
     if (R) node.attr("r", ({index: i}) => R[i]);
+    // console.log(T)
+    if (T) node.attr("id", ({index: i}) => stripSlashes(T[i].split("\n")[0]));
 
     if (W) link.attr("stroke-width", ({index: i}) => W[i]);
     if (L) link.attr("stroke", ({index: i}) => L[i]);
@@ -134,17 +171,31 @@ function ForceGraph({
       node
         .attr("cx", d => d.x)
         .attr("cy", d => d.y);
+
+      // if(!document.getElementById("animcheck").checked && !stopped) {
+      //   simulation.stop();
+      //   stopped = true;
+      //   while (ticks < 400) {
+      //     simulation.tick();
+      // }
+  
+      // // The simulation has been completed. Draw the final product and update the timer.
+      // draw();
+      // // stopped = false;
+      // }
     }
 
-    simulation.alphaTarget(0.1).restart();
     ticked();
   
     function drag(simulation) {    
       function dragstarted(event) {
+        if(stopped) {
+          return;
+        }
         if (!event.active) simulation.alphaTarget(0.3).restart();
         event.subject.fx = event.subject.x;
         event.subject.fy = event.subject.y;
-        infobox(event.subject)
+        infobox(event)
       }
      
       
