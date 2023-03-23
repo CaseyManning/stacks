@@ -189,12 +189,14 @@ function ForceGraph({
   
     function drag(simulation) {    
       function dragstarted(event) {
-        if(stopped) {
+        if(stopped ) {
           return;
         }
-        if (!event.active) simulation.alphaTarget(0.3).restart();
-        event.subject.fx = event.subject.x;
-        event.subject.fy = event.subject.y;
+        if(!global) {
+          if (!event.active) simulation.alphaTarget(0.3).restart();
+          event.subject.fx = event.subject.x;
+          event.subject.fy = event.subject.y;
+        }
         infobox(event)
       }
      
@@ -205,11 +207,13 @@ function ForceGraph({
       }
       
       function dragended(event) {
-        if (!event.active) {
-          simulation.alphaTarget(0.3)
-        };
-        event.subject.fx = null;
-        event.subject.fy = null;
+        if(!global) {
+          if (!event.active && searched_id != null) {
+            simulation.alphaTarget(0.3)
+          };
+          event.subject.fx = null;
+          event.subject.fy = null;
+        }
       }
       
       return d3.drag()

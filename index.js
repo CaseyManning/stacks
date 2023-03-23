@@ -69,7 +69,7 @@ function reloadNodes() {
 console.log(substacks);
 
 function startSim(dataset) {
-
+  d3.selectAll('svg g').remove();
   chart = ForceGraph(dataset, {
       nodeId: d => d.id,
       nodeGroup: d => d.group,
@@ -182,6 +182,7 @@ function search(barId, resultsId) {
       var data = filter_substacks(namesToUrls[this.innerHTML], 3);
       console.log(data)
       global = false;
+      document.getElementById("recenter").classList.remove("hidden");
       startSim(data);
       //zoom in on node with d3
 
@@ -232,14 +233,20 @@ function filter_substacks(origin, radius) {
 
 function viewAll() {
   global = true;
+  document.getElementById("recenter").classList.add("hidden");
   document.getElementById("introPage").classList.add("hidden");
   startSim(substacks);
 
   sim.stop();
 
-  d3.selectAll('svg g').selectChildren("circle")
-  .attr("x", d => cached_positions[d.id][0])
-  .attr("y", d => cached_positions[d.id][1]);
+  // d3.selectAll('svg g').selectChildren("circle")
+  // .attr("x", d => cached_positions[d.id][0])
+  // .attr("y", d => cached_positions[d.id][1]);
+
+  d3.selectAll('svg g').selectChildren("circle").each(function(d) {
+    d.x = cached_positions[d.id][0];
+    d.y = cached_positions[d.id][1];
+  });
 
 node
   .attr("cx", d => d.x)
@@ -264,6 +271,9 @@ function save_positions() {
 }
 
 function recenter() {
+  if(global || searched_id == null) {
+    return;
+  }
   var id = stripSlashes(searched_id);
   var elem = d3.select("#" + id)
   var x = elem.attr("cx");
