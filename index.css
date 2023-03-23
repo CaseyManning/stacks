@@ -21,7 +21,7 @@
 }
 #introsearchbar {
     height: 50px;
-    width: 50vw;
+    width: 500px;
     border-radius: 10px;
     padding: 5px 15px;
     font-size: 13pt;
@@ -79,6 +79,17 @@ input {
 label {
     white-space: nowrap;
     font-size: 11pt;
+    color: #333;
+}
+#recenter {
+    font-size: 11pt;
+    color: #333;
+    margin-left: 30px;
+    cursor: pointer;
+    
+}
+#recenter:hover {
+    text-decoration: underline;
 }
 
 #search {

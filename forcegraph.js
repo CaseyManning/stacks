@@ -206,11 +206,8 @@ function ForceGraph({
       
       function dragended(event) {
         if (!event.active) {
-          if(ticks < 500) {
-            simulation.alphaTarget(0.3)
-          } else {
-            simulation.alphaTarget(0)
-          }};
+          simulation.alphaTarget(0.3)
+        };
         event.subject.fx = null;
         event.subject.fy = null;
       }

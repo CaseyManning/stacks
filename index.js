@@ -1,4 +1,6 @@
 // stacks = JSON.parse(substackData)
+var global = false;
+var zoom;
 var searched_id = null;
 function compute_radius(n_subs) {
   var radius = 5;
@@ -82,7 +84,7 @@ function startSim(dataset) {
   //add to document
   document.body.prepend(chart)
 
-  let zoom = d3.zoom()
+  zoom = d3.zoom()
     .on('zoom', handleZoom);
 
   function handleZoom(e) {
@@ -179,6 +181,7 @@ function search(barId, resultsId) {
       searched_id = namesToUrls[this.innerHTML];
       var data = filter_substacks(namesToUrls[this.innerHTML], 3);
       console.log(data)
+      global = false;
       startSim(data);
       //zoom in on node with d3
 
@@ -228,6 +231,7 @@ function filter_substacks(origin, radius) {
 }
 
 function viewAll() {
+  global = true;
   document.getElementById("introPage").classList.add("hidden");
   startSim(substacks);
 
@@ -257,4 +261,14 @@ function save_positions() {
   });
   console.log(JSON.stringify(positions));
   
+}
+
+function recenter() {
+  var id = stripSlashes(searched_id);
+  var elem = d3.select("#" + id)
+  var x = elem.attr("cx");
+  var y = elem.attr("cy");
+  infobox_stack(searched_id, urlDict[searched_id])
+  
+  d3.select("svg").call(zoom.transform, d3.zoomIdentity.translate(-2*x,-2*y).scale(2));
 }
