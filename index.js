@@ -77,6 +77,9 @@ function startSim(dataset) {
     currentUrls.push(dataset.nodes[i].id);
   }
   d3.selectAll('svg g').remove();
+  if(sim) {
+    sim.stop();
+  }
   chart = ForceGraph(dataset, {
       nodeId: d => d.id,
       nodeGroup: d => d.group,
@@ -207,14 +210,12 @@ function search(barId, resultsId) {
       document.getElementById(resultsId).innerHTML = "";
 
       searched_id = namesToUrls[this.innerHTML];
-      var data = filter_substacks(namesToUrls[this.innerHTML], 3);
-      console.log(data)
-      global = false;
-      startSim(data);
-      //zoom in on node with d3
+      // var data = filter_substacks(namesToUrls[this.innerHTML], 3);
+      // console.log(data)
+      // global = false;
+      // startSim(data);
 
-      // d3.selectAll('svg g').selectChildren("circle").attr("stroke", ({id: d}) => d == id ? "black" : "white")
-      // d3.selectAll('svg g').selectChildren("circle").attr("stroke-width", ({id: d}) => d == id ? 3 : 1.5)
+      viewSelected(searched_id)
     }
     resultElement.classList.add("result");
 
@@ -343,10 +344,12 @@ function recenter() {
 }
 
 function viewClicked(button) {
-  searched_id = button.name;
-  var data = filter_substacks(button.name, 3);
-  console.log(data)
-  global = false;
+  viewSelected(button.name);
+}
 
+function viewSelected(id) {
+  searched_id = id;
+  var data = filter_substacks(id, 3);
+  global = false;
   startSim(data);
 }
