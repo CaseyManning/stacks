@@ -5,15 +5,16 @@ var currentUrls;
 var zoom;
 var searched_id = null;
 function compute_radius(n_subs) {
-  var radius = 5;
+  var min_radius = 7;
+  var radius = min_radius;
   if (n_subs > 0) {
     if(document.getElementById("logcheck").checked == true) {
-      radius = 4*Math.log(n_subs / 2000 + 1) + 5;
+      radius = 4*Math.log(n_subs / 2000 + 1) + min_radius;
     } else {
-      radius = n_subs / 10000 + 5;
+      radius = n_subs / 10000 + min_radius;
     }
-    if(radius < 5) {
-      radius = 5;
+    if(radius < min_radius) {
+      radius = min_radius;
     }
   }
   return radius;
@@ -105,6 +106,25 @@ function startSim(dataset) {
       .call(zoom);
   }
   initZoom();
+  d3.selectAll('svg g').selectChildren("line").attr("stroke", "#aaa")
+
+  if(global) {
+    document.getElementById("recenter").classList.add("hidden");
+    document.getElementById("showglobal").classList.add("hidden");
+    drawingLines = false;
+    document.getElementById("linkscheck").checked = false;
+  } else {
+    document.getElementById("recenter").classList.remove("hidden");
+    document.getElementById("showglobal").classList.remove("hidden");
+    drawingLines = true;
+    document.getElementById("linkscheck").checked = true;
+  }
+  toggleLines(drawingLines);
+  if(window.innerWidth < 400) {
+    document.getElementById("recenter").classList.add("hidden");
+    document.getElementById("showglobal").classList.add("hidden");
+  }
+  toggleLines(drawingLines)
 }
 //on tab key pressed
 document.addEventListener('keydown', function(event) {
@@ -190,7 +210,6 @@ function search(barId, resultsId) {
       var data = filter_substacks(namesToUrls[this.innerHTML], 3);
       console.log(data)
       global = false;
-      document.getElementById("recenter").classList.remove("hidden");
       startSim(data);
       //zoom in on node with d3
 
@@ -267,8 +286,6 @@ function filter_substacks(origin, radius) {
 
 function viewAll() {
   global = true;
-  document.getElementById("recenter").classList.add("hidden");
-  document.getElementById("showglobal").classList.add("hidden");
   document.getElementById("introPage").classList.add("hidden");
   startSim(substacks);
   if(!all_anim) {
@@ -283,12 +300,24 @@ function viewAll() {
       .attr("cx", d => d.x)
       .attr("cy", d => d.y);
 
-    link
-      .attr("x1", d => d.source.x)
+    // link.attr("style", "display: none;")
+      link.attr("x1", d => d.source.x)
       .attr("y1", d => d.source.y)
       .attr("x2", d => d.target.x)
       .attr("y2", d => d.target.y);
+
+    console.log("started static global view")
+  }
 }
+var drawingLines = document.getElementById("linkscheck").checked;
+
+function toggleLines(shouldShow) {
+  drawingLines = shouldShow
+  if(shouldShow) {
+    link.attr("style", "display: unset;")
+  } else {
+    link.attr("style", "display: none;")
+  }
 }
 
 function save_positions() {
@@ -318,7 +347,6 @@ function viewClicked(button) {
   var data = filter_substacks(button.name, 3);
   console.log(data)
   global = false;
-  document.getElementById("recenter").classList.remove("hidden");
-  document.getElementById("showglobal").classList.remove("hidden");
+
   startSim(data);
 }

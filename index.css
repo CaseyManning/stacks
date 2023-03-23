@@ -21,7 +21,7 @@
 }
 #introsearchbar {
     height: 50px;
-    width: 500px;
+    width: min(500px, 90%);
     border-radius: 10px;
     padding: 5px 15px;
     font-size: 13pt;
@@ -128,7 +128,7 @@ label {
 #introsearchresults {
     /* margin-top: -20px; */
     background-color: white;
-    width: 450px;
+    width: min(450px, 90%);
     padding: 0px 15px;
 }
 #allbutton {

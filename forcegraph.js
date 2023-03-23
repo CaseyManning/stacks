@@ -31,7 +31,10 @@ function infobox_stack(nodeID, stack) {
 
   d3.selectAll('svg g').selectChildren("circle").attr("stroke", ({id: d}) => d == nodeID ? "black" : "white")
   d3.selectAll('svg g').selectChildren("circle").attr("stroke-width", ({id: d}) => d == nodeID ? 3 : 1.5)
-  d3.selectAll('svg g').selectChildren("line").attr("stroke", d => (d.source.id == nodeID || d.target.id == nodeID) ? "black" : "gray")
+
+  if(drawingLines) {
+    d3.selectAll('svg g').selectChildren("line").attr("stroke", d => (d.source.id == nodeID || d.target.id == nodeID) ? "black" : "#aaa")
+  }
 }
 
 function stopAnim() {
