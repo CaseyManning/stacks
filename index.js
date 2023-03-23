@@ -1,5 +1,6 @@
 // stacks = JSON.parse(substackData)
 var global = false;
+var all_anim = false;
 var zoom;
 var searched_id = null;
 function compute_radius(n_subs) {
@@ -236,29 +237,24 @@ function viewAll() {
   document.getElementById("recenter").classList.add("hidden");
   document.getElementById("introPage").classList.add("hidden");
   startSim(substacks);
+  if(!all_anim) {
+    sim.stop();
 
-  sim.stop();
+    d3.selectAll('svg g').selectChildren("circle").each(function(d) {
+      d.x = cached_positions[d.id][0];
+      d.y = cached_positions[d.id][1];
+    });
 
-  // d3.selectAll('svg g').selectChildren("circle")
-  // .attr("x", d => cached_positions[d.id][0])
-  // .attr("y", d => cached_positions[d.id][1]);
+    node
+      .attr("cx", d => d.x)
+      .attr("cy", d => d.y);
 
-  d3.selectAll('svg g').selectChildren("circle").each(function(d) {
-    d.x = cached_positions[d.id][0];
-    d.y = cached_positions[d.id][1];
-  });
-
-node
-  .attr("cx", d => d.x)
-  .attr("cy", d => d.y);
-
-  link
-  .attr("x1", d => d.source.x)
-  .attr("y1", d => d.source.y)
-  .attr("x2", d => d.target.x)
-  .attr("y2", d => d.target.y);
-
-
+    link
+      .attr("x1", d => d.source.x)
+      .attr("y1", d => d.source.y)
+      .attr("x2", d => d.target.x)
+      .attr("y2", d => d.target.y);
+}
 }
 
 function save_positions() {
@@ -281,4 +277,13 @@ function recenter() {
   infobox_stack(searched_id, urlDict[searched_id])
   
   d3.select("svg").call(zoom.transform, d3.zoomIdentity.translate(-2*x,-2*y).scale(2));
+}
+
+function viewClicked(button) {
+  searched_id = button.name;
+  var data = filter_substacks(button.name, 3);
+  console.log(data)
+  global = false;
+  document.getElementById("recenter").classList.remove("hidden");
+  startSim(data);
 }

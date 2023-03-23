@@ -36,6 +36,7 @@ body {
     border-radius: 5px;
     position: absolute;
     padding: 30px 30px;
+    padding-bottom: 10px;
     z-index: 99;
     background-color: white;
 }
@@ -52,7 +53,7 @@ body {
     padding: 18px;
 }
 a {
-    color: #888;
+    color: #3875e8;
 }
 .sf {
     font-family: 'SF-Compact', sans-serif;
@@ -181,4 +182,12 @@ button {
 }
 #header {
     height: 25vh;
+}
+#viewbutton {
+    color: black;
+    cursor: pointer;
+    text-decoration: underline;
+}
+#viewbutton:hover {
+    color: #666;
 }

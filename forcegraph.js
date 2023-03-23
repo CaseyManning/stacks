@@ -27,6 +27,7 @@ function infobox_stack(nodeID, stack) {
   document.getElementById("boxlink").href = stack.url;
   document.getElementById("inlinks").innerHTML = "Recommeded by " + stack.inlinks + "  pages.";
   document.getElementById("outlinks").innerHTML = "Recommends " + stack.outlinks.length + " others.";
+  document.getElementById("viewbutton").name = nodeID;
 
   d3.selectAll('svg g').selectChildren("circle").attr("stroke", ({id: d}) => d == nodeID ? "black" : "white")
   d3.selectAll('svg g').selectChildren("circle").attr("stroke-width", ({id: d}) => d == nodeID ? 3 : 1.5)
