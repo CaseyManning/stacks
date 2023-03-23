@@ -3,6 +3,7 @@
     <link rel="stylesheet" href="index.css">
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/fuzzysort@2.0.4/fuzzysort.min.js"></script>
+    <title>Substack Map</title>
 </head>
 <body>
     <div id="navbar">
@@ -12,7 +13,8 @@
         <div id="rightbit">
             <input type="checkbox" id="logcheck"checked onclick="reloadNodes()">
             <label for="vehicle1"> Log Scale</label>
-            <p id="recenter" onclick="recenter()">Recenter</p>
+            <p id="recenter" class="pbutton" onclick="recenter()">Recenter</p>
+            <p id="showglobal" class="pbutton" onclick="viewAll()">Global View</p>
 
             <!-- <input type="checkbox" id="animcheck" checked onclick="stopAnim()">
             <label for="vehicle1"> Animate</label><br> -->

@@ -82,15 +82,18 @@ label {
     font-size: 11pt;
     color: #333;
 }
-#recenter {
+.pbutton {
     font-size: 11pt;
     color: #333;
-    margin-left: 30px;
+    white-space: nowrap;
     cursor: pointer;
-    
+    margin-left: 30px;
 }
-#recenter:hover {
+.pbutton:hover {
     text-decoration: underline;
+}
+#recenter {
+    margin-left: 30px;
 }
 
 #search {
@@ -177,7 +180,7 @@ button {
     color: white;
     cursor: pointer;
     outline: none;
-    font-size: 12pt;
+    font-size: 13pt;
     font-family: 'SF-Compact', sans-serif;
 }
 #header {
