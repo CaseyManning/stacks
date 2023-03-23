@@ -1,6 +1,7 @@
 // stacks = JSON.parse(substackData)
 var global = false;
 var all_anim = false;
+var currentUrls;
 var zoom;
 var searched_id = null;
 function compute_radius(n_subs) {
@@ -70,6 +71,10 @@ function reloadNodes() {
 console.log(substacks);
 
 function startSim(dataset) {
+  currentUrls = [];
+  for(var i = 0; i < dataset.nodes.length; i++) {
+    currentUrls.push(dataset.nodes[i].id);
+  }
   d3.selectAll('svg g').remove();
   chart = ForceGraph(dataset, {
       nodeId: d => d.id,
@@ -172,6 +177,8 @@ function search(barId, resultsId) {
   }
 
   for(var i = 0; i < Math.min(max_results, results.length); i++) {
+    var resultDiv = document.createElement("div");
+    resultDiv.classList.add("resultdiv");
     var resultElement = document.createElement("p");
     resultElement.innerHTML = results[i].target;
     resultElement.onclick = function() {
@@ -191,7 +198,33 @@ function search(barId, resultsId) {
       // d3.selectAll('svg g').selectChildren("circle").attr("stroke-width", ({id: d}) => d == id ? 3 : 1.5)
     }
     resultElement.classList.add("result");
-    resultsDiv.appendChild(resultElement);
+
+    if(barId == "introsearchbar") {
+      resultsDiv.appendChild(resultElement);
+    } else {
+      var resultButton = document.createElement("p");
+      resultButton.classList.add("pbutton");
+      resultButton.style.color = "#999";
+      resultButton.innerHTML = "locate";
+      resultButton.onclick = function() {
+        var id = stripSlashes(namesToUrls[this.previousSibling.innerHTML]);
+        document.getElementById(barId).value = "";
+        document.getElementById(resultsId).innerHTML = "";
+
+        var elem = d3.select("#" + id)
+        var x = elem.attr("cx");
+        var y = elem.attr("cy");
+        infobox_stack(namesToUrls[this.previousSibling.innerHTML], urlDict[namesToUrls[this.previousSibling.innerHTML]])
+        
+        d3.select("svg").call(zoom.transform, d3.zoomIdentity.translate(-2*x,-2*y).scale(2));
+  
+      };
+      resultDiv.appendChild(resultElement);
+      if(currentUrls.includes(namesToUrls[results[i].target])) {
+        resultDiv.appendChild(resultButton);
+      }
+      resultsDiv.appendChild(resultDiv);
+    }
   }
 }
 
@@ -235,6 +268,7 @@ function filter_substacks(origin, radius) {
 function viewAll() {
   global = true;
   document.getElementById("recenter").classList.add("hidden");
+  document.getElementById("showglobal").classList.add("hidden");
   document.getElementById("introPage").classList.add("hidden");
   startSim(substacks);
   if(!all_anim) {
@@ -285,5 +319,6 @@ function viewClicked(button) {
   console.log(data)
   global = false;
   document.getElementById("recenter").classList.remove("hidden");
+  document.getElementById("showglobal").classList.remove("hidden");
   startSim(data);
 }

@@ -9,7 +9,7 @@
     <div id="navbar">
         <img src="favicon.ico" id="logo" onclick="window.location.href = ''">
         <input type="text" class="searchbar" id="searchbar" style="font-size: 12pt;" placeholder="Search for a substack" onkeyup="search('searchbar', 'searchresults')">
-        <div id="searchresults"></div>
+        <div id="searchresults" style="left: 40px;"></div>
         <div id="rightbit">
             <input type="checkbox" id="logcheck"checked onclick="reloadNodes()">
             <label for="vehicle1"> Log Scale</label>
@@ -40,7 +40,8 @@
         <div id="introsearchresults"></div>
         <div style="margin-top: 30px">
             <p style="display: inline; font-size: 14pt; margin-right: 5px;" class="sf">or</p>
-            <button style="display: inline;" onclick="viewAll()">see them all</button>
+            <button id="allbutton" style="display: inline;" onclick="viewAll()">see them all</button>
+            <p style="display: inline; font-size: 12pt; margin-left: 5px;" class="sf">(warning: may be slow)</p>
         </div>
         <a style="position: absolute; bottom: 25px; right: 25px; text-decoration: none;" class="sf" href="https://twitter.com/caseysaccount">by casey</a>
     </div>
