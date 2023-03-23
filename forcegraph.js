@@ -2,7 +2,8 @@ var ticks = 0;
 var lastNode;
 var stopped = false;
 var sim;
-
+var link;
+var node;
 
 function stripSlashes(url) {
   return url.replaceAll("/", "").replaceAll(":", "").replaceAll(".", "").replaceAll(" ", "");
@@ -28,7 +29,6 @@ function infobox_stack(nodeID, stack) {
   document.getElementById("outlinks").innerHTML = "Recommends " + stack.outlinks.length + " others.";
 
   d3.selectAll('svg g').selectChildren("circle").attr("stroke", ({id: d}) => d == nodeID ? "black" : "white")
-  // d3.selectAll('svg g').selectChildren("circle").attr("fill", ({id: d}) => d == nodeID ? "black" : "blue")
   d3.selectAll('svg g').selectChildren("circle").attr("stroke-width", ({id: d}) => d == nodeID ? 3 : 1.5)
   d3.selectAll('svg g').selectChildren("line").attr("stroke", d => (d.source.id == nodeID || d.target.id == nodeID) ? "black" : "gray")
 }
@@ -69,7 +69,7 @@ function ForceGraph({
     linkTarget = ({target}) => target, // given d in links, returns a node identifier string
     linkStroke = "#999", // link stroke color
     linkStrokeOpacity = 0.6, // link stroke opacity
-    linkStrokeWidth = 1.5, // given d in links, returns a stroke width in pixels
+    linkStrokeWidth = 1, // given d in links, returns a stroke width in pixels
     linkStrokeLinecap = "round", // link stroke linecap
     linkStrength,
     colors = d3.schemeTableau10, // an array of color strings, for the node groups
@@ -116,7 +116,7 @@ function ForceGraph({
         .attr("viewBox", [-width / 2, -height / 2, width, height])
         .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
   
-    const link = svg.append("g")
+    link = svg.append("g")
         .attr("stroke", typeof linkStroke !== "function" ? linkStroke : null)
         .attr("stroke-opacity", linkStrokeOpacity)
         .attr("stroke-width", typeof linkStrokeWidth !== "function" ? linkStrokeWidth : null)
@@ -126,7 +126,7 @@ function ForceGraph({
       .join("line");
   
 
-    const node = svg.append("g")
+    node = svg.append("g")
         .attr("fill", nodeFill)
         .attr("stroke", nodeStroke)
         .attr("stroke-opacity", nodeStrokeOpacity)
@@ -152,7 +152,7 @@ function ForceGraph({
 
     if (W) link.attr("stroke-width", ({index: i}) => W[i]);
     if (L) link.attr("stroke", ({index: i}) => L[i]);
-    if (G) node.attr("fill", ({index: i}) => color(G[i]));
+    if (G) node.attr("fill", ({index: i, id: d}) => d == searched_id ? "black" : color(G[i]));
     // if (T) node.append("title").text(({index: i}) => T[i]);
     if (invalidation != null) invalidation.then(() => simulation.stop());
   
@@ -185,7 +185,7 @@ function ForceGraph({
       // }
     }
 
-    ticked();
+    // ticked();
   
     function drag(simulation) {    
       function dragstarted(event) {

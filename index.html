@@ -5,6 +5,18 @@
     <script src="https://cdn.jsdelivr.net/npm/fuzzysort@2.0.4/fuzzysort.min.js"></script>
 </head>
 <body>
+    <div id="navbar">
+        <img src="favicon.ico" id="logo" onclick="window.location.href = ''">
+        <input type="text" class="searchbar" id="searchbar" style="font-size: 12pt;" placeholder="Search for a substack" onkeyup="search('searchbar', 'searchresults')">
+        <div id="searchresults"></div>
+        <div id="rightbit">
+            <input type="checkbox" id="logcheck"checked onclick="reloadNodes()">
+            <label for="vehicle1"> Log Scale</label><br>
+
+            <!-- <input type="checkbox" id="animcheck" checked onclick="stopAnim()">
+            <label for="vehicle1"> Animate</label><br> -->
+        </div>
+    </div>
     <div class="box hidden" id="infobox">
         <h2 id="boxtitle" class="sf" style="color: black;">yo</h2>
         <p id="boxsubs" style="display: inline;">Number of Subscribers</p> <a href="#" id="boxlink" target="_blank" style="display: inline;">(Visit)</a>
@@ -13,18 +25,23 @@
         <p id="inlinks" class="sf"></p>
         <p id="outlinks" class="sf"></p>
     </div>
-    <div class="box" id="settings">
-        <input type="checkbox" id="logcheck"checked onclick="reloadNodes()">
-        <label for="vehicle1"> Log Scale</label><br>
-
-        <input type="checkbox" id="animcheck" checked onclick="stopAnim()">
-        <label for="vehicle1"> Animate</label><br>
-    </div>
-    <div id="search" class="box hidden">
-        <input type="text" id="searchbar" placeholder="Search for a substack" onkeyup="search()">
+    <!-- <div id="search" class="box hidden">
+        <input type="text" class="searchbar" id="searchbar" placeholder="Search for a substack" onkeyup="search('')">
         <div id="searchresults"></div>
+    </div> -->
+    <div id="introPage">
+        <img src="header.png" id="header">
+        <h1>Every Substack, Mapped</h1>
+        <input type="text" class="searchbar" id="introsearchbar" placeholder="Search for a substack to see its neighborhood" onkeyup="search('introsearchbar', 'introsearchresults')">
+        <div id="introsearchresults"></div>
+        <div style="margin-top: 30px">
+            <p style="display: inline; font-size: 14pt; margin-right: 5px;" class="sf">or</p>
+            <button style="display: inline;" onclick="viewAll()">see them all</button>
+        </div>
+        <a style="position: absolute; bottom: 25px; right: 25px; text-decoration: none;" class="sf" href="https://twitter.com/caseysaccount">by casey</a>
     </div>
 </body>
 <script src="substacks.js"></script>
+<script src="positionData.js"></script>
 <script src="forcegraph.js"></script>
 <script src="index.js"></script>
