@@ -1,3 +1,4 @@
+
 // stacks = JSON.parse(substackData)
 var global = false;
 var all_anim = false;
@@ -351,5 +352,17 @@ function viewSelected(id) {
   searched_id = id;
   var data = filter_substacks(id, 3);
   global = false;
+
+  if (history.pushState) {
+    var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?url=' + id;
+    window.history.pushState({path:newurl},'',newurl);
+  }
+
   startSim(data);
+}
+
+if(window.location.search) {
+  document.getElementById("introPage").classList.add("hidden");
+  var url = window.location.search.split("=")[1];
+  viewSelected(url);
 }
