@@ -20,6 +20,7 @@ function infobox_stack(nodeID, stack) {
   console.log(stack)
   document.getElementById("infobox").classList.remove("hidden");
   document.getElementById("boxtitle").innerHTML = stack.name;
+  document.getElementById("categorylabel").innerHTML = "Type: " + stack.category;
   document.getElementById("boxsubs").innerHTML = stack.n_subs + " subscribers";
   if(stack.n_subs < 0) {
     document.getElementById("boxsubs").innerHTML = "Under 1000 subscribers";
@@ -32,8 +33,10 @@ function infobox_stack(nodeID, stack) {
   d3.selectAll('svg g').selectChildren("circle").attr("stroke", ({id: d}) => d == nodeID ? "black" : "white")
   d3.selectAll('svg g').selectChildren("circle").attr("stroke-width", ({id: d}) => d == nodeID ? 3 : 1.5)
 
-  if(drawingLines) {
+  if(drawingLines && !global) {
     d3.selectAll('svg g').selectChildren("line").attr("stroke", d => (d.source.id == nodeID || d.target.id == nodeID) ? "black" : "#aaa")
+    d3.selectAll('svg g').selectChildren("line").attr("stroke-width", d => (d.source.id == nodeID || d.target.id == nodeID) ? "2" : "1")
+    d3.selectAll('svg g').selectChildren("line").attr("stroke-opacity", d => (d.source.id == nodeID || d.target.id == nodeID) ? "1" : "0.6")
   }
 }
 
