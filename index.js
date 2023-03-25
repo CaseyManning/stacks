@@ -56,12 +56,16 @@ function assemble_nodes(curr_stacks) {
     var group = categories.indexOf(stack.category);
     var newNode = {'id' : id, group : group, 'nodeRadius': radius, 'nodeTitle': stack.name}
     nodesAndLinks.nodes.push(newNode);
-    console.log(stack)
     for(var j = 0; j < stack.outlinks.length; j++) {
       if(validURLS.includes(stack.outlinks[j])) {
         nodesAndLinks.links.push({"source" : id, "target" : stack.outlinks[j], "value" : 1});
       }
     }
+  }
+  //calculate incoming links for each substack
+  for(var i = 0; i < nodesAndLinks.links.length; i++) {
+    var link = nodesAndLinks.links[i];
+    urlDict[link.target].inlinks += 1;
   }
   return nodesAndLinks;
 }
