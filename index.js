@@ -1,7 +1,7 @@
 
 // stacks = JSON.parse(substackData)
 var global = false;
-var all_anim = false;
+var all_anim = true;
 var currentUrls;
 var zoom;
 var searched_id = null;
@@ -21,6 +21,14 @@ function compute_radius(n_subs) {
   return radius;
 }
 
+function strengthFromDist(dist) {
+  var min = 0.1;
+  var max = 1;
+  
+  var norm = (dist - min) / (max - min);
+  return norm;
+}
+
 var categories = ["Tech", "Politics", "Business",  "Culture", "Entertainment", "Finance", "Food", "Blockchain", "Science", "Other", "Personal", "Sports"];
 
 var namesToUrls = {};
@@ -31,7 +39,7 @@ for(var i = 0; i < stacks.length; i++) {
 
 var urlDict = {};
 
-
+var linkStrengths = [];
 function assemble_nodes(curr_stacks) {
 
   var validURLS = [];
@@ -43,6 +51,7 @@ function assemble_nodes(curr_stacks) {
     nodes : [],
     links : []
   }
+  linkStrengths = [];
   for(var i = 0; i < curr_stacks.length; i++) {
     var stack = curr_stacks[i];
     stack.inlinks = 0;
@@ -58,6 +67,7 @@ function assemble_nodes(curr_stacks) {
     nodesAndLinks.nodes.push(newNode);
     for(var j = 0; j < stack.outlinks.length; j++) {
       if(validURLS.includes(stack.outlinks[j])) {
+        linkStrengths.push(strengthFromDist(stack.outdists[j]))
         nodesAndLinks.links.push({"source" : id, "target" : stack.outlinks[j], "value" : 1});
       }
     }
@@ -107,7 +117,8 @@ function startSim(dataset) {
       width: window.innerWidth,
       height: window.innerHeight,
       // a promise to stop the simulation when the cell is re-run
-      invalidation: null
+      invalidation: null,
+      linkStrength: linkStrengths
     })
 
   //add to document
@@ -292,17 +303,7 @@ function filter_substacks(origin, radius) {
     }
     queue = newQueue;
   }
-  // for(var i = 0; i < visited.length; i++) {
-  //   var stack = urlDict[visited[i]];
-  //   var radius = compute_radius(stack.n_subs)
-  //   var newNode = {'id' : visited[i], group : i, 'nodeRadius': radius, 'nodeTitle': stack.name}
-  //   substacks.nodes.push(newNode);
-  //   for(var j = 0; j < urlDict[visited[i]].outlinks.length; j++) {
-  //     if(visited.includes(urlDict[visited[i]].outlinks[j])) {
-  //       substacks.links.push({"source": visited[i], "target": urlDict[visited[i]].outlinks[j], "value": 1});
-  //     }
-  //   }
-  // }
+
   var curr_stacks = [];
   for(url in visited) {
     curr_stacks.push(urlDict[visited[url]]);
@@ -312,6 +313,10 @@ function filter_substacks(origin, radius) {
 
 function viewAll() {
   global = true;
+  if (history.pushState) {
+    var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+    window.history.pushState({path:newurl},'',newurl);
+  }
   document.getElementById("introPage").classList.add("hidden");
   startSim(substacks);
   if(!all_anim) {

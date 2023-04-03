@@ -4,6 +4,9 @@ var stopped = false;
 var sim;
 var link;
 var node;
+var f_links;
+
+var toggleStrengths;
 
 function stripSlashes(url) {
   return url.replaceAll("/", "").replaceAll(":", "").replaceAll(".", "").replaceAll(" ", "");
@@ -99,6 +102,7 @@ function ForceGraph({
     nodes = d3.map(nodes, (_, i) => ({id: N[i]}));
     links = d3.map(links, (_, i) => ({source: LS[i], target: LT[i]}));
   
+    f_links = links;
     // Compute default domains.
     if (G && nodeGroups === undefined) nodeGroups = d3.sort(G);
   
@@ -109,8 +113,23 @@ function ForceGraph({
     const forceNode = d3.forceManyBody();
     const forceLink = d3.forceLink(links).id(({index: i}) => N[i]);
     if (nodeStrength !== undefined) forceNode.strength(nodeStrength);
-    if (linkStrength !== undefined) forceLink.strength(linkStrength);
-  
+    // forceNode.strength(-)
+    console.log(linkStrength)
+    console.log(forceLink.strength())
+    // if (linkStrength !== undefined) forceLink.strength(({index: i}) => linkStrength[i]);
+
+    toggleStrengths = () => {
+      if(document.getElementById("semcheck").checked) {
+        const forceLink = d3.forceLink(f_links).id(({index: i}) => N[i]).distance(({index: i}) => Math.max(linkStrength[i] * 220 - 110, 12))//.strength(({index: i}) => linkStrength[i]);
+        sim.force("link", forceLink)
+      } else {
+        console.log("not using semantic distance")
+        const forceLink = d3.forceLink(f_links).id(({index: i}) => N[i]).distance(30)//.strength(({index: i}) => 0.8);
+          sim.force("link", forceLink)
+        }
+        sim.alphaTarget(0.3).restart()
+    }
+    
     const simulation = d3.forceSimulation(nodes)
         .force("link", forceLink)
         .force("charge", forceNode)
@@ -144,6 +163,8 @@ function ForceGraph({
         .attr("r", 5)
         .call(drag(simulation));
     sim = simulation;
+
+    toggleStrengths()
       // node.append("text")
       // .text(function(d) {
       //   return d.id;

@@ -12,6 +12,8 @@
         <input type="text" class="searchbar" id="searchbar" style="font-size: 12pt;" placeholder="Search for a substack" onkeyup="search('searchbar', 'searchresults')">
         <div id="searchresults" style="left: 40px;"></div>
         <div id="rightbit">
+            <input type="checkbox" id="semcheck"checked onclick="toggleStrengths()">
+            <label for="vehicle1"> Semantic Distance</label>
             <input type="checkbox" id="logcheck"checked onclick="reloadNodes()">
             <label for="vehicle1"> Log Scale</label>
             <input type="checkbox" id="linkscheck" onclick="toggleLines(this.checked)">
