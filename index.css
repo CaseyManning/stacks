@@ -70,6 +70,21 @@ h1 {
     font-family: 'SF-title';
 }
 
+.botlink {
+    text-decoration: none;
+}
+.botlink:hover {
+    text-decoration: underline;
+}
+
+.aboutp {
+    width: calc(min(600px, 90%));
+    font-family: 'SF-Compact', sans-serif;
+    font-size: 12pt;
+    color: #333;
+    line-height: 1.5;
+}
+
 .hidden {
     display: none !important;
 }

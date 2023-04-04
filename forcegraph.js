@@ -120,7 +120,7 @@ function ForceGraph({
 
     toggleStrengths = () => {
       if(document.getElementById("semcheck").checked) {
-        const forceLink = d3.forceLink(f_links).id(({index: i}) => N[i]).distance(({index: i}) => Math.max(linkStrength[i] * 220 - 110, 12))//.strength(({index: i}) => linkStrength[i]);
+        const forceLink = d3.forceLink(f_links).id(({index: i}) => N[i]).distance(({index: i}) => Math.max(linkStrength[i], 12))//.strength(({index: i}) => linkStrength[i]);
         sim.force("link", forceLink)
       } else {
         console.log("not using semantic distance")

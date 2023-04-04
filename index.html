@@ -12,11 +12,11 @@
         <input type="text" class="searchbar" id="searchbar" style="font-size: 12pt;" placeholder="Search for a substack" onkeyup="search('searchbar', 'searchresults')">
         <div id="searchresults" style="left: 40px;"></div>
         <div id="rightbit">
-            <input type="checkbox" id="semcheck"checked onclick="toggleStrengths()">
-            <label for="vehicle1"> Semantic Distance</label>
+            <input type="checkbox" id="semcheck"checked onclick="toggleStrengths()" class="hidden">
+            <label for="vehicle1" class="hidden"> Semantic Distance</label>
             <input type="checkbox" id="logcheck"checked onclick="reloadNodes()">
             <label for="vehicle1"> Log Scale</label>
-            <input type="checkbox" id="linkscheck" onclick="toggleLines(this.checked)">
+            <input type="checkbox" id="linkscheck" onclick="toggleLines(this.checked)" checked>
             <label for="vehicle1"> Show Links</label>
             <p id="recenter" class="pbutton" onclick="recenter()">Recenter</p>
             <p id="showglobal" class="pbutton" onclick="viewAll()">Global View</p>
@@ -49,14 +49,15 @@
             <button id="allbutton" style="display: inline;" onclick="viewAll()">see them all</button>
             <p style="display: inline; font-size: 12pt; margin-left: 5px;" class="sf">(warning: may be slow)</p>
         </div>
-        <a style="position: absolute; bottom: 25px; right: 25px; text-decoration: none;" class="sf" href="https://twitter.com/caseysaccount">by casey</a>
+        <a class="sf botlink" style="position: absolute; bottom: 25px; right: 95px" href="https://twitter.com/caseysaccount">by casey</a>
+        <a class="sf botlink" style="position: absolute; bottom: 25px; right: 25px" href="/about.html">about</a>
     </div>
     <script>if(window.location.search) {
         document.getElementById("introPage").classList.add("hidden");
       }
       </script>
 </body>
-<script src="substacks.js"></script>
-<script src="positionData.js"></script>
-<script src="forcegraph.js"></script>
-<script src="index.js"></script>
+<script src="substacks.js" defer></script>
+<script src="positionData.js" defer></script>
+<script src="forcegraph.js" defer></script>
+<script src="index.js" defer></script>

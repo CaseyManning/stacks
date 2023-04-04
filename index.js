@@ -1,7 +1,7 @@
 
 // stacks = JSON.parse(substackData)
 var global = false;
-var all_anim = true;
+var all_anim = false;
 var currentUrls;
 var zoom;
 var searched_id = null;
@@ -21,12 +21,12 @@ function compute_radius(n_subs) {
   return radius;
 }
 
-function strengthFromDist(dist) {
+function calcLinkDist(dist) {
   var min = 0.1;
   var max = 1;
   
   var norm = (dist - min) / (max - min);
-  return norm;
+  return norm * 240 - 110;
 }
 
 var categories = ["Tech", "Politics", "Business",  "Culture", "Entertainment", "Finance", "Food", "Blockchain", "Science", "Other", "Personal", "Sports"];
@@ -67,7 +67,7 @@ function assemble_nodes(curr_stacks) {
     nodesAndLinks.nodes.push(newNode);
     for(var j = 0; j < stack.outlinks.length; j++) {
       if(validURLS.includes(stack.outlinks[j])) {
-        linkStrengths.push(strengthFromDist(stack.outdists[j]))
+        linkStrengths.push(calcLinkDist(stack.outdists[j]))
         nodesAndLinks.links.push({"source" : id, "target" : stack.outlinks[j], "value" : 1});
       }
     }
@@ -144,7 +144,7 @@ function startSim(dataset) {
   if(global) {
     document.getElementById("recenter").classList.add("hidden");
     document.getElementById("showglobal").classList.add("hidden");
-    drawingLines = false;
+    // drawingLines = false;
     document.getElementById("linkscheck").checked = false;
   } else {
     document.getElementById("recenter").classList.remove("hidden");
