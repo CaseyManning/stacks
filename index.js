@@ -145,7 +145,7 @@ function startSim(dataset) {
     document.getElementById("recenter").classList.add("hidden");
     document.getElementById("showglobal").classList.add("hidden");
     // drawingLines = false;
-    document.getElementById("linkscheck").checked = false;
+    // document.getElementById("linkscheck").checked = false;
   } else {
     document.getElementById("recenter").classList.remove("hidden");
     document.getElementById("showglobal").classList.remove("hidden");
