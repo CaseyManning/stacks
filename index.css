@@ -23,6 +23,7 @@
     height: fit-content;
     padding: 30px 40px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.07);
+    transition: 0.1s;
 }
 #introclosebutton {
     position: absolute;
@@ -37,6 +38,7 @@
 #introclosebutton:hover {
     text-decoration: underline;
 }
+#intropage:has(> #introclosebutton:hover) { transform: scale(0.99); }
 
 #aboutpage {
     position: absolute;
