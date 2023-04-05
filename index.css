@@ -24,6 +24,23 @@
     padding: 30px 40px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.07);
 }
+
+#aboutpage {
+    position: absolute;
+    top: 0;
+    margin: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #fff;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: fit-content;
+    height: fit-content;
+    padding: 30px 40px;
+}
 #introsearchbar {
     height: 50px;
     width: min(500px, 90%);
@@ -80,6 +97,15 @@ h1 {
 }
 .botlink:hover {
     text-decoration: underline;
+}
+
+.randlink {
+    text-decoration: none;
+    position: absolute;
+    bottom: 30px;
+    margin: auto;
+    left: 0; right: 0;
+    width: fit-content;
 }
 
 .aboutp {

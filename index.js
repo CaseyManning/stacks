@@ -321,6 +321,7 @@ function viewAll() {
     window.history.pushState({path:newurl},'',newurl);
   }
   document.getElementById("introPage").classList.add("hidden");
+  document.getElementById("randlink").classList.add("hidden");
   document.getElementById("navbar").classList.remove("hidden");
   startSim(substacks);
   if(!all_anim) {
@@ -396,6 +397,7 @@ function viewSelected(id, setUrl=true, maxNodes=10000) {
   }
   if(setUrl) {
     document.getElementById("navbar").classList.remove("hidden");
+    document.getElementById("randlink").classList.add("hidden");
   }
 
   startSim(data);
@@ -414,5 +416,7 @@ if(window.location.search) {
     var url = stacks[Math.floor(Math.random() * stacks.length)].url;
     viewSelected(url, false, 300);
   } 
+  document.getElementById("randlink").classList.remove("hidden");
+  document.getElementById("randlink").innerHTML = "viewing random graph: " + urlDict[searched_id].name;
   document.getElementsByTagName("body").onclick = () => {console.log('hi')}
 }
