@@ -385,6 +385,12 @@ function viewClicked(button) {
   viewSelected(button.name);
 }
 
+function closeIntro() {
+  document.getElementById("introPage").classList.add("hidden");
+  document.getElementById("navbar").classList.remove("hidden");
+  document.getElementById("randlink").classList.add("hidden");
+}
+
 function viewSelected(id, setUrl=true, maxNodes=10000) {
   searched_id = id;
   var data = filter_substacks(id, 3, maxNodes);

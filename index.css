@@ -24,6 +24,19 @@
     padding: 30px 40px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.07);
 }
+#introclosebutton {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    font-family: 'SF-title', sans-serif;
+    font-size: 14pt;
+    cursor: pointer;
+    color: #888;
+    margin: 0;
+}
+#introclosebutton:hover {
+    text-decoration: underline;
+}
 
 #aboutpage {
     position: absolute;
