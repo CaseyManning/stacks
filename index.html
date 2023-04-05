@@ -7,7 +7,7 @@
     <title>Substack Map</title>
 </head>
 <body>
-    <div id="navbar">
+    <div id="navbar" class="hidden">
         <img src="log.png" id="logo" onclick="window.location.href = ''; window.location.search = ''">
         <input type="text" class="searchbar" id="searchbar" style="font-size: 12pt;" placeholder="Search for a substack" onkeyup="search('searchbar', 'searchresults')">
         <div id="searchresults" style="left: 40px;"></div>
@@ -40,18 +40,20 @@
         <div id="searchresults"></div>
     </div> -->
     <div id="introPage">
-        <img src="header.png" id="header">
+        <!-- <img src="header.png" id="header"> -->
         <h1>Every Substack, Mapped</h1>
-        <input type="text" class="searchbar" id="introsearchbar" placeholder="Search for a substack to see its neighborhood" onkeyup="search('introsearchbar', 'introsearchresults')">
+        <input type="text" class="searchbar" id="introsearchbar" placeholder="Search for a substack" onkeyup="search('introsearchbar', 'introsearchresults')">
         <div id="introsearchresults"></div>
         <div style="margin-top: 30px">
             <p style="display: inline; font-size: 14pt; margin-right: 5px;" class="sf">or</p>
             <button id="allbutton" style="display: inline;" onclick="viewAll()">see them all</button>
-            <p style="display: inline; font-size: 12pt; margin-left: 5px;" class="sf">(warning: may be slow)</p>
+            <p style="display: inline; font-size: 12pt; margin-left: 5px;" class="sf">(warning: slow)</p>
         </div>
-        <a class="sf botlink" style="position: absolute; bottom: 25px; right: 95px" href="https://twitter.com/caseysaccount">by casey</a>
-        <a class="sf botlink" style="position: absolute; bottom: 25px; right: 25px" href="/about.html">about</a>
-    </div>
+        <div style="width: 100%; display: flex; justify-content: center; margin-top: 20px;">
+            <a id="ilink1" class="sf botlink" style="margin: 0px 10px;" href="https://twitter.com/caseysaccount">by casey</a>
+            <a id="ilink2" class="sf botlink" style="margin: 0px 10px;" href="/about.html">about</a>
+        </div>
+   </div>
     <script>if(window.location.search) {
         document.getElementById("introPage").classList.add("hidden");
       }

@@ -318,6 +318,7 @@ function viewAll() {
     window.history.pushState({path:newurl},'',newurl);
   }
   document.getElementById("introPage").classList.add("hidden");
+  document.getElementById("navbar").classList.remove("hidden");
   startSim(substacks);
   if(!all_anim) {
     sim.stop();
@@ -326,6 +327,8 @@ function viewAll() {
       d.x = cached_positions[d.id][0];
       d.y = cached_positions[d.id][1];
     });
+
+    d3.select("svg").call(zoom.transform, d3.zoomIdentity.scale(0.1));
 
     node
       .attr("cx", d => d.x)
@@ -374,17 +377,22 @@ function recenter() {
 }
 
 function viewClicked(button) {
+  document.getElementById("navbar").classList.remove("hidden");
   viewSelected(button.name);
 }
 
-function viewSelected(id) {
+function viewSelected(id, setUrl=true) {
   searched_id = id;
   var data = filter_substacks(id, 3);
   global = false;
 
-  if (history.pushState) {
+  if(setUrl && history.pushState) {
     var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?url=' + id;
     window.history.pushState({path:newurl},'',newurl);
+    
+  }
+  if(setUrl) {
+    document.getElementById("navbar").classList.remove("hidden");
   }
 
   startSim(data);
@@ -392,6 +400,12 @@ function viewSelected(id) {
 
 if(window.location.search) {
   document.getElementById("introPage").classList.add("hidden");
+  document.getElementById("navbar").classList.remove("hidden");
   var url = window.location.search.split("=")[1];
   viewSelected(url);
+} else {
+  //select random url
+  var url = stacks[Math.floor(Math.random() * stacks.length)].url;
+  viewSelected(url, false);
+  document.getElementsByTagName("body").onclick = () => {console.log('hi')}
 }
