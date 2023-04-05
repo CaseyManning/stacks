@@ -22,6 +22,7 @@
     width: fit-content;
     height: fit-content;
     padding: 30px 40px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.07);
 }
 #introsearchbar {
     height: 50px;

@@ -279,7 +279,7 @@ function search(barId, resultsId) {
 }
 
 //find all at most radius connections away
-function filter_substacks(origin, radius) {
+function filter_substacks(origin, radius, maxNodes) {
   // var substacks = {"nodes": [], "links": []};
   var queue = [origin];
   var visited = [origin];
@@ -290,6 +290,9 @@ function filter_substacks(origin, radius) {
     var newQueue = [];
     for(var j = 0; j < queue.length; j++) {
       for(var k = 0; k < stacks.length; k++) {
+        if(visited.length > maxNodes) {
+          break
+        }
         var stack = stacks[k];
         if(stack.outlinks.includes(queue[j]) && !visited.includes(stack.url)) {
           newQueue.push(stack.url);
@@ -381,9 +384,9 @@ function viewClicked(button) {
   viewSelected(button.name);
 }
 
-function viewSelected(id, setUrl=true) {
+function viewSelected(id, setUrl=true, maxNodes=10000) {
   searched_id = id;
-  var data = filter_substacks(id, 3);
+  var data = filter_substacks(id, 3, maxNodes);
   global = false;
 
   if(setUrl && history.pushState) {
@@ -406,6 +409,10 @@ if(window.location.search) {
 } else {
   //select random url
   var url = stacks[Math.floor(Math.random() * stacks.length)].url;
-  viewSelected(url, false);
+  viewSelected(url, false, 300);
+  while(currentUrls.length < 30) {
+    var url = stacks[Math.floor(Math.random() * stacks.length)].url;
+    viewSelected(url, false, 300);
+  } 
   document.getElementsByTagName("body").onclick = () => {console.log('hi')}
 }
