@@ -40,6 +40,21 @@
 }
 #intropage:has(> #introclosebutton:hover) { transform: scale(0.99); }
 
+#infoclosebutton {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    font-family: 'SF-title', sans-serif;
+    font-size: 14pt;
+    cursor: pointer;
+    color: #888;
+    margin: 0;
+}
+#infoclosebutton:hover {
+    text-decoration: underline;
+}
+
+
 #aboutpage {
     position: absolute;
     top: 0;

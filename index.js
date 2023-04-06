@@ -2,8 +2,11 @@
 // stacks = JSON.parse(substackData)
 var global = false;
 var all_anim = false;
+var curr_data;
 var currentUrls;
 var zoom;
+var pcas = [];
+
 var searched_id = null;
 function compute_radius(n_subs) {
   var min_radius = 7;
@@ -19,6 +22,13 @@ function compute_radius(n_subs) {
     }
   }
   return radius;
+}
+function convertPCACoords(vec) {
+  var fac = 50;
+  if(global) {
+    fac = 250;
+  }
+  return [vec[0] * fac, vec[1] * fac];
 }
 
 function calcLinkDist(dist) {
@@ -41,7 +51,7 @@ var urlDict = {};
 
 var linkStrengths = [];
 function assemble_nodes(curr_stacks) {
-
+  pcas = [];
   var validURLS = [];
   for(var i = 0; i < curr_stacks.length; i++) {
     validURLS.push(curr_stacks[i].url);
@@ -71,6 +81,7 @@ function assemble_nodes(curr_stacks) {
         nodesAndLinks.links.push({"source" : id, "target" : stack.outlinks[j], "value" : 1});
       }
     }
+    pcas.push(convertPCACoords(stack.pca));
   }
   //calculate incoming links for each substack
   for(var i = 0; i < nodesAndLinks.links.length; i++) {
@@ -79,9 +90,10 @@ function assemble_nodes(curr_stacks) {
   }
   return nodesAndLinks;
 }
-
+global = true;
 const substacks = assemble_nodes(stacks);
-
+const global_pcas = pcas;
+global = false;
 //calculate incoming links for each substack
 for(var i = 0; i < substacks.links.length; i++) {
   var link = substacks.links[i];
@@ -314,6 +326,29 @@ function filter_substacks(origin, radius, maxNodes) {
   return assemble_nodes(curr_stacks);
 }
 
+function positionGlobalNodes() {
+  sim.stop();
+
+  d3.selectAll('svg g').selectChildren("circle").each(function(d) {
+    d.x = cached_positions[d.id][0];
+    d.y = cached_positions[d.id][1];
+  });
+
+  d3.select("svg").call(zoom.transform, d3.zoomIdentity.scale(0.1));
+
+  node
+    .attr("cx", d => d.x)
+    .attr("cy", d => d.y);
+
+  // link.attr("style", "display: none;")
+    link.attr("x1", d => d.source.x)
+    .attr("y1", d => d.source.y)
+    .attr("x2", d => d.target.x)
+    .attr("y2", d => d.target.y);
+
+  console.log("started static global view")
+}
+
 function viewAll() {
   global = true;
   if (history.pushState) {
@@ -323,28 +358,10 @@ function viewAll() {
   document.getElementById("introPage").classList.add("hidden");
   document.getElementById("randlink").classList.add("hidden");
   document.getElementById("navbar").classList.remove("hidden");
+  curr_data = substacks;
   startSim(substacks);
   if(!all_anim) {
-    sim.stop();
-
-    d3.selectAll('svg g').selectChildren("circle").each(function(d) {
-      d.x = cached_positions[d.id][0];
-      d.y = cached_positions[d.id][1];
-    });
-
-    d3.select("svg").call(zoom.transform, d3.zoomIdentity.scale(0.1));
-
-    node
-      .attr("cx", d => d.x)
-      .attr("cy", d => d.y);
-
-    // link.attr("style", "display: none;")
-      link.attr("x1", d => d.source.x)
-      .attr("y1", d => d.source.y)
-      .attr("x2", d => d.target.x)
-      .attr("y2", d => d.target.y);
-
-    console.log("started static global view")
+    positionGlobalNodes();
   }
 }
 var drawingLines = document.getElementById("linkscheck").checked;
@@ -390,12 +407,16 @@ function closeIntro() {
   document.getElementById("navbar").classList.remove("hidden");
   document.getElementById("randlink").classList.add("hidden");
 }
+function closeInfo() {
+  document.getElementById("infobox").classList.add("hidden");
+}
 
 function viewSelected(id, setUrl=true, maxNodes=10000) {
   searched_id = id;
   var data = filter_substacks(id, 3, maxNodes);
+  curr_data = data;
   global = false;
-
+  document.getElementById("pcacheck").checked = false;
   if(setUrl && history.pushState) {
     var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?url=' + id;
     window.history.pushState({path:newurl},'',newurl);
@@ -425,4 +446,32 @@ if(window.location.search) {
   document.getElementById("randlink").classList.remove("hidden");
   document.getElementById("randlink").innerHTML = "viewing random graph: " + urlDict[searched_id].name;
   document.getElementsByTagName("body").onclick = () => {console.log('hi')}
+}
+
+function togglePCA() {
+  if(document.getElementById("pcacheck").checked) {
+    var curr_pcas;
+    if(global) {
+      curr_pcas = global_pcas;
+    } else {
+      curr_pcas = pcas;
+    }
+    sim.stop()
+    d3.selectAll('svg g').selectChildren("circle").attr("cx", ({index: d}) => curr_pcas[d][0]).attr("cy", ({index: d}) => curr_pcas[d][1]);
+    d3.selectAll('svg g').selectChildren("circle").attr("x", ({index: d}) => curr_pcas[d][0]).attr("y", ({index: d}) => curr_pcas[d][1]);
+    link
+    .attr("x1", d => curr_pcas[d.source.index][0])
+    .attr("y1", d => curr_pcas[d.source.index][1])
+    .attr("x2", d => curr_pcas[d.target.index][0])
+    .attr("y2", d => curr_pcas[d.target.index][1]);
+    stopped = true;
+  } else {
+    stopped = false;
+    // startSim(curr_data);
+    if(!global) {
+      sim.alphaTarget(0.3).restart();
+    } else {
+      positionGlobalNodes()
+    }
+  }
 }

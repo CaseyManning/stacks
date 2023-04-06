@@ -217,10 +217,10 @@ function ForceGraph({
   
     function drag(simulation) {    
       function dragstarted(event) {
-        if(stopped ) {
-          return;
-        }
-        if(!global) {
+        // if(stopped ) {
+        //   return;
+        // }
+        if(!global && !stopped) {
           if (!event.active) simulation.alphaTarget(0.3).restart();
           event.subject.fx = event.subject.x;
           event.subject.fy = event.subject.y;
